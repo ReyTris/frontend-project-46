@@ -7,5 +7,8 @@ publish:
 lint:
 	npx eslint .
 
-lintfix:#fixing linter
+lintfix:
 	npx eslint . --fix
+
+test-coverage:
+	npm test -- --coverage

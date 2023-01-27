@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import _ from 'lodash';
 import path from 'path';
 
-const getFilePath = (filename) => path.resolve(process.cwd(), filename); // получение относительного и абсолютного путей
+const getFilePath = (filename) => path.resolve(process.cwd(), filename);
 const readFile = (pathname) => readFileSync(pathname, 'utf-8');
 const parseJSON = (file) => JSON.parse(file);
 
@@ -37,21 +37,21 @@ const diffInformation = (file1, file2) => {
         type: 'unchanged',
       };
     }
-    if ((obj1[key] && obj2[key]) && (obj1[key] !== obj2[key])) {
-      return {
-        key,
-        type: 'changed',
-        oldValue: obj1[key],
-        newValue: obj2[key],
-      };
-    }
+    // if ((obj1[key] && obj2[key]) && (obj1[key] !== obj2[key])) {
+    return {
+      key,
+      type: 'changed',
+      oldValue: obj1[key],
+      newValue: obj2[key],
+    };
+    // }
   });
 
   return result;
 };
 export default (filepath1, filepath2) => {
   const getDiffInformation = diffInformation(filepath1, filepath2);
-  const diff = getDiffInformation.map((diff) => {
+  const difference = getDiffInformation.map((diff) => {
     const typeDiff = diff.type;
 
     switch (typeDiff) {
@@ -62,11 +62,11 @@ export default (filepath1, filepath2) => {
       case 'unchanged':
         return `    ${diff.key}: ${diff.value}`;
       case 'changed':
-        return `  - ${diff.key}: ${diff.oldValue} \n  + ${diff.key}: ${diff.newValue}`;
+        return `  - ${diff.key}: ${diff.oldValue}\n  + ${diff.key}: ${diff.newValue}`;
       default:
         return null;
     }
   });
 
-  return `{\n${diff.join('\n')}\n}`;
+  return `{\n${difference.join('\n')}\n}`;
 };
